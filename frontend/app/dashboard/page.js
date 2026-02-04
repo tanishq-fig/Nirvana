@@ -21,7 +21,7 @@ export default function DashboardPage() {
 
   const loadActivities = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/activity/recent?limit=5`, {
+      const response = await axios.get(`${API_URL}/api/activity/recent?limit=50`, {
         withCredentials: true
       });
       setActivities(response.data.activities || []);
@@ -89,7 +89,7 @@ export default function DashboardPage() {
         <h2 className="text-3xl font-gothic text-gothic-blood dark:text-gothic-blood light:text-gothic-gold mb-6">
           Recent Activity
         </h2>
-        <div className="space-y-4">
+        <div className="max-h-[500px] overflow-y-auto pr-2 space-y-4 custom-scrollbar">
           {activities.length > 0 ? (
             activities.map((activity) => (
               <ActivityItem 
