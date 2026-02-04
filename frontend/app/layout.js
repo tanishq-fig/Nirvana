@@ -1,7 +1,6 @@
 import './globals.css';
 import { ThemeProvider } from '../context/ThemeContext';
 import { AuthProvider } from '../context/AuthContext';
-import AudioPlayer from '../components/AudioPlayer';
 
 export const metadata = {
   title: 'Nirvana Guild - Gothic Gaming Community',
@@ -15,7 +14,6 @@ export default function RootLayout({ children }) {
       <body>
         <ThemeProvider>
           <AuthProvider>
-            <AudioPlayer />
             {children}
           </AuthProvider>
         </ThemeProvider>
