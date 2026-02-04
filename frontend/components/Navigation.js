@@ -12,6 +12,7 @@ export default function Navigation() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const getIcon = (name) => {
     const icons = {
@@ -60,15 +61,15 @@ export default function Navigation() {
             whileHover={{ scale: 1.05 }}
             onClick={() => router.push('/dashboard')}
             className="cursor-pointer flex-shrink-0"
-            style={{ marginLeft: '-120px' }}
+            style={{ marginLeft: '0px' }}
           >
-            <h2 className="text-4xl md:text-5xl font-gothic text-accent whitespace-nowrap tracking-widest glow-effect" style={{ textShadow: '0 0 20px rgba(139, 0, 0, 0.8), 0 0 30px rgba(139, 0, 0, 0.6)' }}>
+            <h2 className="text-3xl md:text-5xl font-gothic text-accent whitespace-nowrap tracking-widest glow-effect md:ml-[-120px]" style={{ textShadow: '0 0 20px rgba(139, 0, 0, 0.8), 0 0 30px rgba(139, 0, 0, 0.6)' }}>
               NIRVANA
             </h2>
           </motion.div>
 
-          {/* Nav Items */}
-          <div className="flex items-center gap-1 flex-shrink-0">
+          {/* Desktop Nav Items */}
+          <div className="hidden lg:flex items-center gap-1 flex-shrink-0">
             {navItems.map((item) => {
               const isActive = pathname === item.path;
               return (
@@ -90,8 +91,22 @@ export default function Navigation() {
             })}
           </div>
 
-          {/* User Menu */}
-          <div className="relative">
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            className="lg:hidden p-2 text-gray-300 hover:text-white"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {showMobileMenu ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+
+          {/* Desktop User Menu */}
+          <div className="relative hidden lg:block">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -154,6 +169,63 @@ export default function Navigation() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {showMobileMenu && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="lg:hidden bg-black border-t border-gray-800"
+          >
+            <div className="px-4 py-4 space-y-2">
+              {navItems.map((item) => {
+                const isActive = pathname === item.path;
+                return (
+                  <button
+                    key={item.path}
+                    onClick={() => {
+                      router.push(item.path);
+                      setShowMobileMenu(false);
+                    }}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                      isActive
+                        ? 'bg-accent text-white'
+                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                    }`}
+                  >
+                    {getIcon(item.name)}
+                    <span className="font-medium">{item.name}</span>
+                  </button>
+                );
+              })}
+              <div className="pt-2 border-t border-gray-800 space-y-2">
+                <button
+                  onClick={() => {
+                    router.push('/dashboard/profile');
+                    setShowMobileMenu(false);
+                  }}
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-all"
+                >
+                  <span>👤</span>
+                  <span>Profile</span>
+                </button>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setShowMobileMenu(false);
+                  }}
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-400 hover:bg-gray-800 transition-all"
+                >
+                  <span>🚪</span>
+                  <span>Logout</span>
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }
