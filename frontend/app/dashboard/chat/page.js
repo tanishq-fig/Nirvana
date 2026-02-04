@@ -26,10 +26,11 @@ export default function ChatPage() {
 
     // Initialize socket connection
     const newSocket = io(SOCKET_URL, {
-      transports: ['websocket', 'polling'],
+      transports: ['polling', 'websocket'],
       reconnection: true,
-      reconnectionAttempts: 5,
+      reconnectionAttempts: 10,
       reconnectionDelay: 1000,
+      withCredentials: true,
     });
 
     newSocket.on('connect', () => {

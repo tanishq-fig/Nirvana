@@ -23,7 +23,9 @@ const io = socketIo(server, {
     origin: ['http://localhost:3000', 'http://localhost:3001', 'https://nirvana-guild.vercel.app', /\.vercel\.app$/],
     methods: ['GET', 'POST'],
     credentials: true
-  }
+  },
+  transports: ['polling', 'websocket'],
+  allowEIO3: true
 });
 
 // Middleware
