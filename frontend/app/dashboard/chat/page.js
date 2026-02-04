@@ -202,9 +202,14 @@ function MessageBubble({ message, currentUser, isGrouped }) {
             <div className="w-8 h-8 rounded-full border border-gothic-crimson overflow-hidden bg-gothic-dark">
               {message.profilePicture && message.profilePicture !== '/uploads/default-avatar.png' ? (
                 <img
-                  src={`${process.env.NEXT_PUBLIC_API_URL}${message.profilePicture}`}
+                  src={`${API_URL}${message.profilePicture}`}
                   alt={message.username}
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.style.display = 'none';
+                    e.target.parentElement.innerHTML = '<div class="w-full h-full flex items-center justify-center"><svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg></div>';
+                  }}
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
